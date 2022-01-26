@@ -9,13 +9,14 @@ python run_speech_recognition_ctc.py \
 --per_device_eval_batch_size="16" \
 --gradient_accumulation_steps="1" \
 --learning_rate="7.5e-5" \
---warmup_steps="1000" \
+--lr_scheduler_type="linear" \
+--warmup_steps="2000" \
 --length_column_name="input_length" \
 --evaluation_strategy="steps" \
 --text_column_name="sentence" \
 --chars_to_ignore , ? . ! \- \; \: \" “ % ‘ ” � — ’ … – । \| \& \
---save_steps="500" \
---eval_steps="500" \
+--save_steps="400" \
+--eval_steps="400" \
 --logging_steps="100" \
 --layerdrop="0.0" \
 --activation_dropout="0.1" \
@@ -26,6 +27,7 @@ python run_speech_recognition_ctc.py \
 --mask_time_length="10" \
 --mask_feature_prob="0.25" \
 --mask_feature_length="64" \
+--seed="42" \
 --gradient_checkpointing \
 --use_auth_token \
 --fp16 \
