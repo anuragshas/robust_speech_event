@@ -448,9 +448,9 @@ def main():
         else:
             batch["target_text"] = batch[text_column_name].lower()
         # Remove english characters
-        batch["sentence"] = re.sub(r'[a-z]', '', batch["sentence"])
+        batch["target_text"] = re.sub(r'[a-z]', '', batch["target_text"])
         # Unicode Normalization
-        batch["sentence"] = unicodedata.normalize('NFKC', batch["sentence"])
+        batch["target_text"] = unicodedata.normalize('NFKC', batch["target_text"])
         return batch
 
     with training_args.main_process_first(desc="dataset map special characters removal"):
