@@ -20,7 +20,7 @@ python run_speech_recognition_ctc.py \
 --layerdrop="0.0" \
 --activation_dropout="0.1" \
 --save_total_limit="1" \
---freeze_feature_extractor \
+--freeze_feature_encoder \
 --feat_proj_dropout="0.0" \
 --mask_time_prob="0.75" \
 --mask_time_length="10" \
