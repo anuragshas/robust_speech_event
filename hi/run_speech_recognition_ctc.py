@@ -440,6 +440,7 @@ def main():
     chars_to_ignore_regex = (
         f'[{re.escape("".join(data_args.chars_to_ignore))}]' if data_args.chars_to_ignore is not None else None
     )
+    print("************************************"+chars_to_ignore_regex+"************************************")
     text_column_name = data_args.text_column_name
 
     def remove_special_characters(batch):
