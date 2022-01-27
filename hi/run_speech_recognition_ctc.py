@@ -31,7 +31,7 @@ import numpy as np
 import torch
 from datasets import DatasetDict, load_dataset, load_metric
 
-import bitsandbytes as bnb
+# import bitsandbytes as bnb
 import transformers
 from transformers import (
     AutoConfig,
@@ -668,25 +668,25 @@ def main():
     # Instantiate custom data collator
     data_collator = DataCollatorCTCWithPadding(processor=processor)
 
-    decay_parameters = get_parameter_names(model, [torch.nn.LayerNorm])
-    decay_parameters = [name for name in decay_parameters if "bias" not in name]
-    optimizer_grouped_parameters = [
-        {
-            "params": [p for n, p in model.named_parameters() if n in decay_parameters],
-            "weight_decay": training_args.weight_decay,
-        },
-        {
-            "params": [p for n, p in model.named_parameters() if n not in decay_parameters],
-            "weight_decay": 0.0,
-        },
-    ]
-    optimizer = bnb.optim.Adam8bit(
-        params=optimizer_grouped_parameters,
-        betas=(training_args.adam_beta1, training_args.adam_beta2),
-        eps=training_args.adam_epsilon,
-    )
+    # decay_parameters = get_parameter_names(model, [torch.nn.LayerNorm])
+    # decay_parameters = [name for name in decay_parameters if "bias" not in name]
+    # optimizer_grouped_parameters = [
+    #     {
+    #         "params": [p for n, p in model.named_parameters() if n in decay_parameters],
+    #         "weight_decay": training_args.weight_decay,
+    #     },
+    #     {
+    #         "params": [p for n, p in model.named_parameters() if n not in decay_parameters],
+    #         "weight_decay": 0.0,
+    #     },
+    # ]
+    # optimizer = bnb.optim.Adam8bit(
+    #     params=optimizer_grouped_parameters,
+    #     betas=(training_args.adam_beta1, training_args.adam_beta2),
+    #     eps=training_args.adam_epsilon,
+    # )
 
-    optimizers = (optimizer, None)
+    # optimizers = (optimizer, None)
 
     # Initialize Trainer
     trainer = Trainer(
@@ -697,7 +697,7 @@ def main():
         train_dataset=vectorized_datasets["train"] if training_args.do_train else None,
         eval_dataset=vectorized_datasets["eval"] if training_args.do_eval else None,
         tokenizer=feature_extractor,
-        optimizers=optimizers,
+        # optimizers=optimizers,
     )
 
     # 8. Finally, we can start training
