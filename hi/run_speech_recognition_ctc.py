@@ -437,8 +437,9 @@ def main():
     # that make training complicated and do not help in transcribing the speech
     # E.g. characters, such as `,` and `.` do not really have an acoustic characteristic
     # that could be easily picked up by the model
+    backslash_char = "\\"
     chars_to_ignore_regex = (
-        f'[{re.escape("".join(data_args.chars_to_ignore))}]' if data_args.chars_to_ignore is not None else None
+        f'[{backslash_char}{backslash_char.join(data_args.chars_to_ignore)}]' if data_args.chars_to_ignore is not None else None
     )
     print("************************************"+chars_to_ignore_regex+"************************************")
     text_column_name = data_args.text_column_name
