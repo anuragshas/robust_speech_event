@@ -83,7 +83,7 @@ def main(args):
     dataset = dataset.cast_column("audio", Audio(sampling_rate=sampling_rate))
 
     # load eval pipeline
-    asr = pipeline("automatic-speech-recognition", model=args.model_id)
+    asr = pipeline("automatic-speech-recognition", model=args.model_id, device=0)
 
     # map function to decode audio
     def map_to_pred(batch):
