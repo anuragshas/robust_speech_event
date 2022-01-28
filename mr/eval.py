@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import re
+import unicodedata
 from typing import Dict
 
 from datasets import Audio, Dataset, load_dataset, load_metric
@@ -49,9 +50,10 @@ def log_results(result: Dataset, args: Dict[str, str]):
 def normalize_text(text: str) -> str:
     """DO ADAPT FOR YOUR USE CASE. this function normalizes the target text."""
 
-    chars_to_ignore_regex = '''[\।\!\"\,\-\.\?\:\|\“\”\–\;\'\’]'''  # noqa: W605 IMPORTANT: this should correspond to the chars that were ignored during training
+    chars_to_ignore_regex = '''[\।\!\"\,\-\.\?\:\|\“\”\–\;\'\’\‘\॔]'''  # noqa: W605 IMPORTANT: this should correspond to the chars that were ignored during training
 
     text = re.sub(chars_to_ignore_regex, "", text.lower())
+    text = unicodedata.normalize("NFKC", text)
 
     # In addition, we can normalize the target text, e.g. removing new lines characters etc...
     # note that order is important here!
