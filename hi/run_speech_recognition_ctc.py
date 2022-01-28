@@ -447,8 +447,6 @@ def main():
             batch["target_text"] = re.sub(chars_to_ignore_regex, "", batch[text_column_name]).lower() + " "
         else:
             batch["target_text"] = batch[text_column_name].lower() + " "
-        # Remove english characters
-        batch["target_text"] = re.sub(r'[a-z]', '', batch["target_text"])
         # Unicode Normalization
         batch["target_text"] = unicodedata.normalize('NFKC', batch["target_text"])
         return batch
