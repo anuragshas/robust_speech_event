@@ -31,7 +31,6 @@ import numpy as np
 import torch
 from datasets import DatasetDict, load_dataset, load_metric
 
-# import bitsandbytes as bnb
 import transformers
 from transformers import (
     AutoConfig,
@@ -45,14 +44,13 @@ from transformers import (
     Wav2Vec2Processor,
     set_seed,
 )
-from transformers.trainer_pt_utils import get_parameter_names
 from transformers.trainer_utils import get_last_checkpoint, is_main_process
 from transformers.utils import check_min_version
 from transformers.utils.versions import require_version
 
 
 # Will error if the minimal version of Transformers is not installed. Remove at your own risks.
-check_min_version("4.16.0.dev0")
+check_min_version("4.17.0.dev0")
 
 require_version("datasets>=1.13.3", "To fix: pip install -r examples/pytorch/text-classification/requirements.txt")
 
@@ -446,9 +444,9 @@ def main():
 
     def remove_special_characters(batch):
         if chars_to_ignore_regex is not None:
-            batch["target_text"] = re.sub(chars_to_ignore_regex, "", batch[text_column_name]).lower()
+            batch["target_text"] = re.sub(chars_to_ignore_regex, "", batch[text_column_name]).lower() + " "
         else:
-            batch["target_text"] = batch[text_column_name].lower()
+            batch["target_text"] = batch[text_column_name].lower() + " "
         # Remove english characters
         batch["target_text"] = re.sub(r'[a-z]', '', batch["target_text"])
         # Unicode Normalization
@@ -670,26 +668,6 @@ def main():
     # Instantiate custom data collator
     data_collator = DataCollatorCTCWithPadding(processor=processor)
 
-    # decay_parameters = get_parameter_names(model, [torch.nn.LayerNorm])
-    # decay_parameters = [name for name in decay_parameters if "bias" not in name]
-    # optimizer_grouped_parameters = [
-    #     {
-    #         "params": [p for n, p in model.named_parameters() if n in decay_parameters],
-    #         "weight_decay": training_args.weight_decay,
-    #     },
-    #     {
-    #         "params": [p for n, p in model.named_parameters() if n not in decay_parameters],
-    #         "weight_decay": 0.0,
-    #     },
-    # ]
-    # optimizer = bnb.optim.Adam8bit(
-    #     params=optimizer_grouped_parameters,
-    #     betas=(training_args.adam_beta1, training_args.adam_beta2),
-    #     eps=training_args.adam_epsilon,
-    # )
-
-    # optimizers = (optimizer, None)
-
     # Initialize Trainer
     trainer = Trainer(
         model=model,
@@ -699,7 +677,6 @@ def main():
         train_dataset=vectorized_datasets["train"] if training_args.do_train else None,
         eval_dataset=vectorized_datasets["eval"] if training_args.do_eval else None,
         tokenizer=feature_extractor,
-        # optimizers=optimizers,
     )
 
     # 8. Finally, we can start training
