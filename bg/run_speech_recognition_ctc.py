@@ -448,6 +448,9 @@ def main():
             batch["target_text"] = batch[text_column_name].lower() + " "
         batch["target_text"] = batch["target_text"].replace('a','а')
         batch["target_text"] = batch["target_text"].replace('e','е')
+        batch["target_text"] = batch["target_text"].replace('i','і')
+        batch["target_text"] = batch["target_text"].replace('o','о')
+        batch["target_text"] = batch["target_text"].replace('x','х')
         return batch
 
     with training_args.main_process_first(desc="dataset map special characters removal"):
