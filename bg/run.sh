@@ -24,7 +24,7 @@ python run_speech_recognition_ctc.py \
         --mask_time_length="10" \
         --mask_feature_prob="0.25" \
         --mask_feature_length="64" \
-		--chars_to_ignore , ? . ! \- \; \: \" “ % ‘ ” � — ’ … – « » „ \
+        --chars_to_ignore , ? . ! \- \; \: \" “ % ‘ ” � — ’ … – « » „ \
         --gradient_checkpointing \
         --use_auth_token \
         --fp16 \
