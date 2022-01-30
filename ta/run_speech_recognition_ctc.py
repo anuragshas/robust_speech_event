@@ -439,13 +439,15 @@ def main():
         f'[{"".join(data_args.chars_to_ignore)}]' if data_args.chars_to_ignore is not None else None
     )
     text_column_name = data_args.text_column_name
-
+    print("************************************"+chars_to_ignore_regex+"************************************")
+    
     def remove_special_characters(batch):
         batch[text_column_name] = unicodedata.normalize("NFKC", batch[text_column_name])
         if chars_to_ignore_regex is not None:
             batch["target_text"] = re.sub(chars_to_ignore_regex, "", batch[text_column_name]).lower() + " "
         else:
             batch["target_text"] = batch[text_column_name].lower() + " "
+        batch["target_text"] = re.sub("[a-z]", "", batch["target_text"])
         return batch
 
     with training_args.main_process_first(desc="dataset map special characters removal"):

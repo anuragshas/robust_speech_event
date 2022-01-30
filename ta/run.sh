@@ -4,7 +4,7 @@ python run_speech_recognition_ctc.py \
         --dataset_config_name="ta" \
         --output_dir="./" \
         --overwrite_output_dir \
-        --num_train_epochs="5" \
+        --num_train_epochs="10" \
         --per_device_train_batch_size="32" \
         --per_device_eval_batch_size="16" \
         --learning_rate="7.5e-5" \
@@ -24,7 +24,7 @@ python run_speech_recognition_ctc.py \
         --mask_time_length="10" \
         --mask_feature_prob="0.25" \
         --mask_feature_length="64" \
-        --chars_to_ignore , ? . ! \- \; \: \" “ % ‘ ” � — ’ … – \
+        --chars_to_ignore , ? . ! \- \; \: \" “ % ‘ ” � — ’ … – ‚ • \′ ◯ ⁄ \\\\ _ \` · á é ô š \
         --gradient_checkpointing \
         --use_auth_token \
         --fp16 \
