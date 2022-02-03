@@ -8,7 +8,7 @@ python run_speech_recognition_ctc.py \
         --per_device_train_batch_size="32" \
         --per_device_eval_batch_size="16" \
         --learning_rate="7.5e-5" \
-        --warmup_steps="1000" \
+        --warmup_steps="200" \
         --length_column_name="input_length" \
         --evaluation_strategy="steps" \
         --text_column_name="sentence" \
