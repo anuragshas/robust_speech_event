@@ -1,14 +1,14 @@
 python run_speech_recognition_ctc.py \
         --dataset_name="mozilla-foundation/common_voice_8_0" \
         --model_name_or_path="facebook/wav2vec2-xls-r-300m" \
-        --dataset_config_name="pa-IN" \
+        --dataset_config_name="mr" \
         --output_dir="./" \
         --overwrite_output_dir \
-        --num_train_epochs="60" \
+        --num_train_epochs="500" \
         --per_device_train_batch_size="32" \
         --per_device_eval_batch_size="16" \
         --learning_rate="7.5e-5" \
-        --warmup_steps="200" \
+        --warmup_steps="1500" \
         --length_column_name="input_length" \
         --evaluation_strategy="steps" \
         --text_column_name="sentence" \
