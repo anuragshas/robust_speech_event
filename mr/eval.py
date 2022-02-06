@@ -4,6 +4,7 @@ import re
 import unicodedata
 from typing import Dict
 
+import torch
 from datasets import Audio, Dataset, load_dataset, load_metric
 
 from transformers import AutoFeatureExtractor, pipeline
@@ -20,8 +21,12 @@ def log_results(result: Dataset, args: Dict[str, str]):
     cer = load_metric("cer")
 
     # compute metrics
-    wer_result = wer.compute(references=result["target"], predictions=result["prediction"])
-    cer_result = cer.compute(references=result["target"], predictions=result["prediction"])
+    wer_result = wer.compute(
+        references=result["target"], predictions=result["prediction"]
+    )
+    cer_result = cer.compute(
+        references=result["target"], predictions=result["prediction"]
+    )
 
     # print & log results
     result_str = f"WER: {wer_result}\n" f"CER: {cer_result}"
@@ -50,7 +55,7 @@ def log_results(result: Dataset, args: Dict[str, str]):
 def normalize_text(text: str) -> str:
     """DO ADAPT FOR YOUR USE CASE. this function normalizes the target text."""
 
-    chars_to_ignore_regex = '''[\,\?\.\!\-\;\:\"\“\%\‘\”\�\—\’\…\–\'\।\॔]'''  # noqa: W605 IMPORTANT: this should correspond to the chars that were ignored during training
+    chars_to_ignore_regex = """[\,\?\.\!\-\;\:\"\“\%\‘\”\�\—\’\…\–\'\।\॔]"""  # noqa: W605 IMPORTANT: this should correspond to the chars that were ignored during training
     text = unicodedata.normalize("NFKC", text)
     text = re.sub(chars_to_ignore_regex, "", text.lower())
 
@@ -66,7 +71,9 @@ def normalize_text(text: str) -> str:
 
 def main(args):
     # load dataset
-    dataset = load_dataset(args.dataset, args.config, split=args.split, use_auth_token=True)
+    dataset = load_dataset(
+        args.dataset, args.config, split=args.split, use_auth_token=True
+    )
 
     # for testing: only process the first two examples as a test
     # dataset = dataset.select(range(10))
@@ -79,12 +86,18 @@ def main(args):
     dataset = dataset.cast_column("audio", Audio(sampling_rate=sampling_rate))
 
     # load eval pipeline
-    asr = pipeline("automatic-speech-recognition", model=args.model_id, device=0)
+    if args.device is None:
+        args.device = 0 if torch.cuda.is_available() else -1
+    asr = pipeline(
+        "automatic-speech-recognition", model=args.model_id, device=args.device
+    )
 
     # map function to decode audio
     def map_to_pred(batch):
         prediction = asr(
-            batch["audio"]["array"], chunk_length_s=args.chunk_length_s, stride_length_s=args.stride_length_s
+            batch["audio"]["array"],
+            chunk_length_s=args.chunk_length_s,
+            stride_length_s=args.stride_length_s,
         )
 
         batch["prediction"] = prediction["text"]
@@ -103,7 +116,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
-        "--model_id", type=str, required=True, help="Model identifier. Should be loadable with 🤗 Transformers"
+        "--model_id",
+        type=str,
+        required=True,
+        help="Model identifier. Should be loadable with 🤗 Transformers",
     )
     parser.add_argument(
         "--dataset",
@@ -112,17 +128,36 @@ if __name__ == "__main__":
         help="Dataset name to evaluate the `model_id`. Should be loadable with 🤗 Datasets",
     )
     parser.add_argument(
-        "--config", type=str, required=True, help="Config of the dataset. *E.g.* `'en'`  for Common Voice"
-    )
-    parser.add_argument("--split", type=str, required=True, help="Split of the dataset. *E.g.* `'test'`")
-    parser.add_argument(
-        "--chunk_length_s", type=float, default=None, help="Chunk length in seconds. Defaults to 5 seconds."
-    )
-    parser.add_argument(
-        "--stride_length_s", type=float, default=None, help="Stride of the audio chunks. Defaults to 1 second."
+        "--config",
+        type=str,
+        required=True,
+        help="Config of the dataset. *E.g.* `'en'`  for Common Voice",
     )
     parser.add_argument(
-        "--log_outputs", action="store_true", help="If defined, write outputs to log file for analysis."
+        "--split", type=str, required=True, help="Split of the dataset. *E.g.* `'test'`"
+    )
+    parser.add_argument(
+        "--chunk_length_s",
+        type=float,
+        default=None,
+        help="Chunk length in seconds. Defaults to 5 seconds.",
+    )
+    parser.add_argument(
+        "--stride_length_s",
+        type=float,
+        default=None,
+        help="Stride of the audio chunks. Defaults to 1 second.",
+    )
+    parser.add_argument(
+        "--log_outputs",
+        action="store_true",
+        help="If defined, write outputs to log file for analysis.",
+    )
+    parser.add_argument(
+        "--device",
+        type=int,
+        default=None,
+        help="The device to run the pipeline on. -1 for CPU (default), 0 for the first GPU and so on.",
     )
     args = parser.parse_args()
 
