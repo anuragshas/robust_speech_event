@@ -254,7 +254,7 @@ class ExtraArguments:
         metadata = {"help":"If true uses tristage LR scheduler (refer to XLS-R paper)"}
     )
     wandb_project: str = field(
-        default=None,
+        default="",
         metadata = {"help":"Name of wandb project to log into"}
     )
 
