@@ -21,6 +21,7 @@ import logging
 import os
 import re
 import sys
+import unicodedata
 import warnings
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Union
@@ -493,6 +494,8 @@ def main():
             batch["target_text"] = re.sub(chars_to_ignore_regex, "", batch[text_column_name]).lower() + " "
         else:
             batch["target_text"] = batch[text_column_name].lower() + " "
+        # Unicode Normalization
+        batch["target_text"] = unicodedata.normalize('NFKC', batch["target_text"])
         return batch
 
     with training_args.main_process_first(desc="dataset map special characters removal"):

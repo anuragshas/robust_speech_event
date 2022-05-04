@@ -4,9 +4,10 @@ python run_speech_recognition_ctc.py \
 --dataset_config_name="ur" \
 --output_dir="./" \
 --overwrite_output_dir \
---num_train_epochs="100" \
---per_device_train_batch_size="32" \
---per_device_eval_batch_size="16" \
+# --num_train_epochs="100" \
+--max_steps 10000 \
+--per_device_train_batch_size="64" \
+--per_device_eval_batch_size="64" \
 --gradient_accumulation_steps="2" \
 --learning_rate="7.5e-5" \
 --warmup_ratio="0.1" \
