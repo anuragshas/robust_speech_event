@@ -15,7 +15,8 @@ RUN pip install --upgrade pip && \
     pip install git+https://github.com/huggingface/datasets && \
     pip install https://github.com/kpu/kenlm/archive/master.zip && \
     pip install torchaudio librosa jiwer pyctcdecode && \
-    pip install pandas numpy nano gradio 
+    pip install pandas numpy nano gradio \
+    pip install bitsandbytes-cuda111
 
 # Create a HOME dedicated to the OVHcloud user (42420:42420)
 RUN chown -R 42420:42420 /workspace
