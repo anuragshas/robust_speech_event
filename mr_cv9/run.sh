@@ -4,7 +4,7 @@ python run_speech_recognition_ctc.py \
 --dataset_config_name="mr" \
 --output_dir="./" \
 --overwrite_output_dir \
---max_steps 6124 \
+--max_steps 15309 \
 --per_device_train_batch_size="64" \
 --per_device_eval_batch_size="64" \
 --gradient_accumulation_steps="2" \
